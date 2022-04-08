@@ -15,37 +15,20 @@ public class UIManager : MonoBehaviour
 
     [Header("Item scene")]
     [SerializeField] private GameObject itemScene;
-    [SerializeField] private TextMeshProUGUI item_name;
-    [SerializeField] private RawImage item_display;
-    [SerializeField] private TextMeshProUGUI item_price;
-    [SerializeField] private TextMeshProUGUI item_sus;
-    [SerializeField] private TextMeshProUGUI item_rating;
+    [SerializeField] private TextMeshProUGUI current_item_name;
+    [SerializeField] private RawImage current_item_display;
+    [SerializeField] private TextMeshProUGUI current_item_price;
+    [SerializeField] private TextMeshProUGUI current_item_sus;
+    [SerializeField] private TextMeshProUGUI current_item_rating;
 
     [Header("Map scene")]
     [SerializeField] private GameObject mapScene;
+    [SerializeField] private GameObject mapItemScene;
 
+    #region Initialize
     private void Start()
     {
-        // Test
         GenerateItems();
-    }
-
-    public void SelectRandom()
-    {
-        // Set current item
-        currentItem = items[Random.Range(0, items.Length)];
-
-        // Set name
-        item_name.SetText(currentItem.item_name);
-        // Set image
-        if (currentItem.item_image)
-            item_display.texture = currentItem.item_image;
-        // Set price
-        item_price.SetText(currentItem.item_price.ToString("F"));
-        // Set sus
-        item_sus.SetText(currentItem.item_sus.ToString());
-        // Set rating
-        item_rating.SetText(currentItem.item_rating.ToString("F"));
     }
 
     public void GenerateItems()
@@ -66,5 +49,70 @@ public class UIManager : MonoBehaviour
                 i.item_rating = Random.Range(0.1f, 5f);
         }
     }
+    #endregion
 
+    #region Display
+    public void ShowMainMenu()
+    {
+        HideAllScenes();
+        mainMenuScene.SetActive(true);
+    }
+
+    public void ShowItemScene()
+    {
+        HideAllScenes();
+        itemScene.SetActive(true);
+        DisplayCurrentItem();
+    }
+
+    public void ShowMapScene()
+    {
+        HideAllScenes();
+        mapScene.SetActive(true);
+    }
+
+    public void ShowMapItemScene()
+    {
+        HideAllScenes();
+        mapItemScene.SetActive(true);
+    }
+
+    public void HideAllScenes()
+    {
+        mainMenuScene.SetActive(false);
+        itemScene.SetActive(false);
+        mapScene.SetActive(false);
+        mapItemScene.SetActive(false);
+    }
+    #endregion
+
+    #region Item
+    public void SelectRandom()
+    {
+        // Set current item to be a random item
+        currentItem = items[Random.Range(0, items.Length)];
+    }
+
+    public void DisplayCurrentItem()
+    {
+        // Set name
+        current_item_name.SetText(currentItem.item_name);
+        // Set image
+        if (currentItem.item_image)
+            current_item_display.texture = currentItem.item_image;
+        // Set price
+        current_item_price.SetText(currentItem.item_price.ToString("F"));
+        // Set sus
+        current_item_sus.SetText(currentItem.item_sus.ToString());
+        // Set rating
+        current_item_rating.SetText(currentItem.item_rating.ToString("F"));
+    }
+    #endregion
+
+    #region Debug
+    public void DebugToConsole()
+    {
+        Debug.Log("!!!");
+    }
+    #endregion
 }

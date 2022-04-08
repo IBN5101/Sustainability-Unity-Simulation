@@ -10,4 +10,22 @@ public class Item : MonoBehaviour
     [SerializeField] public float item_price;
     [SerializeField] public int item_sus;
     [SerializeField] public float item_rating;
+
+    [Header("Map")]
+    [SerializeField] public GameObject map_location;
+
+
+    #region Map
+    public void ShowLocation()
+    {
+        if (map_location)
+            map_location.SetActive(true);
+    }
+
+    public void HideLocation()
+    {
+        if (map_location)
+            map_location.SetActive(false);
+    }
+    #endregion
 }
