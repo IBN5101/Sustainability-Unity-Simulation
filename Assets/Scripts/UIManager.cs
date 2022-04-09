@@ -12,6 +12,9 @@ public class UIManager : MonoBehaviour
 
     [Header("Main menu")]
     [SerializeField] private GameObject mainMenuScene;
+    // Popup panels
+    [SerializeField] private GameObject panelFAQ;
+    [SerializeField] private GameObject panelBug;
 
     [Header("Item scene")]
     [SerializeField] private GameObject itemScene;
@@ -20,6 +23,11 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI current_item_price;
     [SerializeField] private TextMeshProUGUI current_item_sus;
     [SerializeField] private TextMeshProUGUI current_item_rating;
+    // Popup panels
+    [SerializeField] private GameObject panelSus;
+    [SerializeField] private TextMeshProUGUI panelSusRating;
+    [SerializeField] private GameObject panelIngredients;
+    [SerializeField] private GameObject panelRating;
 
     [Header("Map scene")]
     [SerializeField] private GameObject mapScene;
@@ -53,6 +61,7 @@ public class UIManager : MonoBehaviour
     #endregion
 
     #region Display
+    // Main menu
     public void ShowMainMenu()
     {
         HideAllScenes();
@@ -84,10 +93,18 @@ public class UIManager : MonoBehaviour
 
     public void HideAllScenes()
     {
+        // Scenes
         mainMenuScene.SetActive(false);
         itemScene.SetActive(false);
         mapScene.SetActive(false);
         mapItemScene.SetActive(false);
+
+        // Popup panels (just in case)
+        panelFAQ.SetActive(false);
+        panelBug.SetActive(false);
+        panelSus.SetActive(false);
+        panelIngredients.SetActive(false);
+        panelRating.SetActive(false);
     }
     #endregion
 
@@ -111,6 +128,9 @@ public class UIManager : MonoBehaviour
         current_item_sus.SetText(currentItem.item_sus.ToString());
         // Set rating
         current_item_rating.SetText(currentItem.item_rating.ToString("F"));
+
+        // Set rating (for sus panel)
+        panelSusRating.SetText(currentItem.item_sus.ToString());
     }
 
     public void ShowCurrentItemLocation()
