@@ -62,6 +62,7 @@ public class UIManager : MonoBehaviour
     {
         HideAllScenes();
         itemScene.SetActive(true);
+
         DisplayCurrentItem();
     }
 
@@ -75,6 +76,9 @@ public class UIManager : MonoBehaviour
     {
         HideAllScenes();
         mapItemScene.SetActive(true);
+
+        HideAllMapItemLocations();
+        ShowCurrentItemLocation();
     }
 
     public void HideAllScenes()
@@ -106,6 +110,17 @@ public class UIManager : MonoBehaviour
         current_item_sus.SetText(currentItem.item_sus.ToString());
         // Set rating
         current_item_rating.SetText(currentItem.item_rating.ToString("F"));
+    }
+
+    public void ShowCurrentItemLocation()
+    {
+        currentItem.ShowLocation();
+    }
+
+    public void HideAllMapItemLocations()
+    {
+        foreach (Item i in items)
+            i.HideLocation();
     }
     #endregion
 
