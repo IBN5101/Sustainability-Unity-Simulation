@@ -29,6 +29,7 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         GenerateItems();
+        ShowMainMenu();
     }
 
     public void GenerateItems()
