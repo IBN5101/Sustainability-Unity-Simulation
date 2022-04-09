@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System.Linq;
 
 public class UIManager : MonoBehaviour
 {
     [Header("Items")]
     [SerializeField] private Item[] items;
     [SerializeField] private Item currentItem;
+    [SerializeField] private Item rec1;
+    [SerializeField] private Item rec2;
 
     [Header("Main menu")]
     [SerializeField] private GameObject mainMenuScene;
@@ -28,6 +31,21 @@ public class UIManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI panelSusRating;
     [SerializeField] private GameObject panelIngredients;
     [SerializeField] private GameObject panelRating;
+    
+    [Header("Recommendations")]
+    // Ducking end me
+    // Rec-1
+    [SerializeField] private TextMeshProUGUI rec1_item_name;
+    [SerializeField] private RawImage rec1_item_display;
+    [SerializeField] private TextMeshProUGUI rec1_item_price;
+    [SerializeField] private TextMeshProUGUI rec1_item_sus;
+    [SerializeField] private TextMeshProUGUI rec1_item_rating;
+    // Rec-2
+    [SerializeField] private TextMeshProUGUI rec2_item_name;
+    [SerializeField] private RawImage rec2_item_display;
+    [SerializeField] private TextMeshProUGUI rec2_item_price;
+    [SerializeField] private TextMeshProUGUI rec2_item_sus;
+    [SerializeField] private TextMeshProUGUI rec2_item_rating;
 
     [Header("Map scene")]
     [SerializeField] private GameObject mapScene;
@@ -113,10 +131,27 @@ public class UIManager : MonoBehaviour
     {
         // Set current item to be a random item
         currentItem = items[Random.Range(0, items.Length)];
+
+        // Set recommendation items
+        List<Item> itemList = items.ToList();
+        itemList.Remove(currentItem);
+        // Ah yes, there is no get+remove in C#
+        // I blame my Java experience
+        for (int i = 0; i < 2; i++)
+        {
+            int index = Random.Range(0, itemList.Count);
+            // Bad solution
+            if (i == 0)
+                rec1 = itemList[index];
+            if (i == 1)
+                rec2 = itemList[index];
+            itemList.RemoveAt(index);
+        }
     }
 
     public void DisplayCurrentItem()
     {
+        // Main item
         // Set name
         current_item_name.SetText(currentItem.item_name);
         // Set image
@@ -131,6 +166,39 @@ public class UIManager : MonoBehaviour
 
         // Set rating (for sus panel)
         panelSusRating.SetText(currentItem.item_sus.ToString());
+
+        // Display recommendations
+        // (bundled together with this method just in case)
+        DisplayRecommendations();
+    }
+
+    public void DisplayRecommendations()
+    {
+        // Rec-1
+        // Set name
+        rec1_item_name.SetText(rec1.item_name);
+        // Set image
+        if (rec1.item_image)
+            rec1_item_display.texture = rec1.item_image;
+        // Set price
+        rec1_item_price.SetText(rec1.item_price.ToString("F"));
+        // Set sus
+        rec1_item_sus.SetText(rec1.item_sus.ToString());
+        // Set rating
+        rec1_item_rating.SetText(rec1.item_rating.ToString("F"));
+
+        // Rec-2
+        // Set name
+        rec2_item_name.SetText(rec2.item_name);
+        // Set image
+        if (rec2.item_image)
+            rec2_item_display.texture = rec2.item_image;
+        // Set price
+        rec2_item_price.SetText(rec2.item_price.ToString("F"));
+        // Set sus
+        rec2_item_sus.SetText(rec2.item_sus.ToString());
+        // Set rating
+        rec2_item_rating.SetText(rec2.item_rating.ToString("F"));
     }
 
     public void ShowCurrentItemLocation()
