@@ -12,6 +12,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private Item currentItem;
     [SerializeField] private Item rec1;
     [SerializeField] private Item rec2;
+    private Stack<Item> itemHistory;
 
     [Header("Main menu")]
     [SerializeField] private GameObject mainMenuScene;
@@ -54,6 +55,9 @@ public class UIManager : MonoBehaviour
     #region Initialize
     private void Start()
     {
+        // Initialize history
+        itemHistory = new Stack<Item>();
+
         GenerateItems();
         ShowMainMenu();
     }
@@ -149,6 +153,29 @@ public class UIManager : MonoBehaviour
         }
     }
 
+    public void SelectRandomWithoutMain()
+    {
+        // This method is the same as SelectRandom()
+        // but without random on currentItem
+        // Bad solution.
+
+        // Set recommendation items
+        List<Item> itemList = items.ToList();
+        itemList.Remove(currentItem);
+        // Ah yes, there is no get+remove in C#
+        // I blame my Java experience
+        for (int i = 0; i < 2; i++)
+        {
+            int index = Random.Range(0, itemList.Count);
+            // Bad solution
+            if (i == 0)
+                rec1 = itemList[index];
+            if (i == 1)
+                rec2 = itemList[index];
+            itemList.RemoveAt(index);
+        }
+    }
+
     public void DisplayCurrentItem()
     {
         // Main item
@@ -201,15 +228,40 @@ public class UIManager : MonoBehaviour
         rec2_item_rating.SetText(rec2.item_rating.ToString("F"));
     }
 
+    // Item location
     public void ShowCurrentItemLocation()
     {
         currentItem.ShowLocation();
     }
-
     public void HideAllMapItemLocations()
     {
         foreach (Item i in items)
             i.HideLocation();
+    }
+
+    // Item recommendation navigation
+    public void BackButton()
+    {
+        if (itemHistory.Count == 0)
+            return;
+
+        currentItem = itemHistory.Pop();
+        SelectRandomWithoutMain();
+
+        DisplayCurrentItem();
+    }
+    public void MoveToRec(int rec)
+    {
+        // Modify history
+        itemHistory.Push(currentItem);
+
+        // Generate new
+        if (rec == 1)
+            currentItem = rec1;
+        if (rec == 2)
+            currentItem = rec2;
+        SelectRandomWithoutMain();
+        DisplayCurrentItem();
     }
     #endregion
 
